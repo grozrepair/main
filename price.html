@@ -136,7 +136,7 @@
           </div>
 
           <div class="total-price">
-            Итого: <span id="total-price">500</span> ₽
+            Итого: <span id="total-price">300</span> ₽
           </div>
 
           <button class="btn calc-btn">
@@ -250,8 +250,8 @@
           let price = 0;
 
           if (cableOption.checked) price += length * 30;
-          if (socketOption.checked) price += 400;
-          if (switchOption.checked) price += 350;
+          if (socketOption.checked) price += 500;
+
 
           // Минимальная стоимость
           if (price < 300 && (cableOption.checked || socketOption.checked || switchOption.checked)) {
