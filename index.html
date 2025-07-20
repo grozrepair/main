@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GrozRepair - Главная</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@300;400;500&display=swap">
+  <style>
+    :root {
+      --primary-color: #6c5ce7;
+      --secondary-color: #a29bfe;
+      --accent-color: #00cec9;
+      --light-color: #f8f9fa;
+      --dark-color: #121212;
+      --darker-color: #0a0a0a;
+      --text-light: #e0e0e0;
+      --text-muted: #b0b0b0;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, var(--darker-color) 0%, var(--dark-color) 100%);
+      min-height: 100vh;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+    
+    .landing {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .landing::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, 
+                rgba(108, 92, 231, 0.1) 0%, 
+                rgba(44, 44, 84, 0.3) 50%, 
+                transparent 70%);
+      z-index: -1;
+      animation: rotate 20s linear infinite;
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      text-align: center;
+      background-color: rgba(26, 26, 26, 0.85);
+      padding: 3rem 2rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3),
+                  0 0 0 1px rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(8px);
+      animation: fadeIn 1s ease-out;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .logo {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 4rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, var(--accent-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 2px 10px rgba(0, 206, 201, 0.3);
+    }
+    
+    .slogan {
+      font-size: 1.5rem;
+      margin-bottom: 2.5rem;
+      color: var(--text-muted);
+      font-weight: 300;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .btn {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+      color: var(--darker-color);
+      padding: 1rem 2.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(108, 92, 231, 0.4),
+                 0 0 0 1px rgba(255, 255, 255, 0.1);
+      border: none;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 25px rgba(108, 92, 231, 0.5),
+                  0 0 0 1px rgba(255, 255, 255, 0.15);
+    }
+    
+    .btn:active {
+      transform: translateY(1px);
+    }
+    
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: -1;
+    }
+    
+    .btn:hover::after {
+      opacity: 1;
+    }
+    
+    /* Неоновый эффект для логотипа */
+    .logo::after {
+      content: 'GrozRepair';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      text-shadow: 0 0 10px var(--accent-color),
+                   0 0 20px var(--accent-color),
+                   0 0 30px var(--accent-color);
+      opacity: 0.3;
+      z-index: -1;
+    }
+    
+    @media (max-width: 768px) {
+      .logo {
+        font-size: 3rem;
+      }
+      
+      .slogan {
+        font-size: 1.2rem;
+      }
+      
+      .container {
+        padding: 2rem 1.5rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .logo {
+        font-size: 2.5rem;
+      }
+      
+      .slogan {
+        font-size: 1rem;
+      }
+      
+      .btn {
+        padding: 0.8rem 1.8rem;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body class="landing">
+  <div class="container center">
+    <h1 class="logo">GrozRepair</h1>
+    <p class="slogan">Чиним быстро, качественно и с выездом</p>
+    <a href="price.html" class="btn">Вперёд ремонтироваться 🚀</a>
+  </div>
+</body>
+</html>
