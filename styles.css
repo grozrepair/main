@@ -148,7 +148,6 @@ main {
 }
 
 .section-title::after {
-  content: "();";
   color: var(--light);
   background: transparent;
   -webkit-text-fill-color: var(--light);
