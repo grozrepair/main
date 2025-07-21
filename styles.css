@@ -543,6 +543,78 @@ main {
   }
 }
 
+
+.developing-container {
+  text-align: center;
+  padding: 60px 20px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.terminal-animation {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.3rem;
+  color: #00ff88;
+  margin-bottom: 30px;
+  position: relative;
+  display: inline-block;
+}
+
+.prompt {
+  color: #00ffaa;
+  margin-right: 8px;
+}
+
+.typing::after {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 27px;
+  background: #00ffaa;
+  margin-left: 1px;
+  animation: blink 0.8s infinite;
+  vertical-align: bottom;
+}
+
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0; }
+}
+
+.gear-animation {
+  font-size: 40px;
+  color: #3498db;
+  margin-bottom: 20px;
+  animation: spinPulse 2s linear infinite;
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+
+@keyframes spinPulse {
+  0%   { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+
+.dev-text {
+  font-size: 1.1rem;
+  color: #ccc;
+  margin-top: 10px;
+}
+
+
+
+
+
 @keyframes float {
   0% {
     transform: translateY(0px);
