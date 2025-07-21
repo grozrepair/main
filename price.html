@@ -42,10 +42,91 @@
         <button class="tab-btn active" data-tab="computer">
           <i class="fas fa-laptop-code"></i> Компьютеры
         </button>
+
         <button class="tab-btn" data-tab="electro">
           <i class="fas fa-bolt"></i> Электромонтаж
         </button>
+
+        <button class="tab-btn" data-tab="proxy">
+        <i class="fas fa-shield-alt"></i> Прокси
+        </button>
+
+        <button class="tab-btn" data-tab="scripts">
+          <i class="fas fa-code"></i> Скрипты на заказ
+        </button>
+
       </div>
+
+
+
+
+     <div class="tab-content" id="proxy">
+          <div class="developing-container">
+
+            <div class="terminal-animation">
+              <span class="prompt">>_<</span>
+              <span class="typing">Подключение к прокси...</span>
+            </div>
+
+            <div class="gear-animation">
+              <i class="fas fa-cog fa-spin"></i>
+            </div>
+            <p class="dev-text">Раздел активно в разработке. Скоро здесь появится магия</p>
+          </div>
+            
+      </div>
+
+
+
+
+
+      <div class="tab-content" id="scripts">
+        <div style="padding: 30px;">
+          <h3>Скрипты на заказ</h3>
+          <p>Пишем индивидуальные скрипты на C# и C++ для автоматизации ваших задач — от 500 ₽.</p>
+          <ul>
+              <div class="services-grid">
+                <div class="service-card">
+                  <div class="service-icon">
+                    <i class="fas fa-cogs"></i>
+                  </div>
+                  <h3>Автоматизация рутины</h3>
+                  <p>Создание скриптов для повседневных задач</p>
+                  <div class="price">от 500 ₽</div>
+                </div>
+
+                <div class="service-card">
+                  <div class="service-icon">
+                    <i class="fas fa-robot"></i>
+                  </div>
+                  <h3>Боты, парсеры, утилиты</h3>
+                  <p>Разработка инструментов на C# / C++ под задачи клиента</p>
+                  <div class="price">от 1000 ₽</div>
+                </div>
+
+                <div class="service-card">
+                  <div class="service-icon">
+                    <i class="fas fa-shield-alt"></i>
+                  </div>
+                  <h3>Безопасная передача</h3>
+                  <p>Передача готовых скриптов с поддержкой и обновлениями</p>
+                  <div class="price">входит в стоимость</div>
+                </div>
+              </div>
+          </ul>
+          <button class="btn calc-btn" onclick="window.open('https://t.me/grozrepair', '_blank')">
+            <i class="fas fa-paper-plane"></i> Заказать скрипт
+          </button>
+        </div>
+        <!-- Контакты -->
+        <section class="contacts-section" style="margin-top: 100px;">
+          <!-- вставь блок контактов отсюда, см. ниже -->
+        </section>
+      </div>
+
+
+
+
 
       <div class="tab-content active" id="computer">
         <div class="services-grid">
@@ -126,15 +207,26 @@
           </div>
 
           <div class="slider-container">
-            <label>Длина кабеля: <strong id="length-value">10</strong> метров</label>
-            <input type="range" min="1" max="100" value="10" class="slider" id="length-slider">
+            <label for="length-slider">
+              Длина кабеля: <strong id="length-value">10</strong> метров
+            </label>
+            
+            <input
+              type="range"
+              min="1"
+              max="100"
+              value="10"
+              class="slider"
+              id="length-slider"
+              title="Выберите длину кабеля от 1 до 100 метров"
+            >
+            
             <div class="slider-value">
               <span>1м</span>
               <span>50м</span>
               <span>100м</span>
             </div>
           </div>
-
           <div class="total-price">
             Итого: <span id="total-price">300</span> ₽
           </div>
@@ -144,6 +236,11 @@
           </button>
 
         </div>
+
+
+
+
+
         <section class="contacts-section" style="margin-top: 100px;">
           <h1 class="section-title">Контакты</h1>
           <p class="section-subtitle">Свяжитесь с нами любым удобным способом. Мы всегда
