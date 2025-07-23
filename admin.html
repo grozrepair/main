@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Добавить товар</title>
+  <style>
+    body { font-family: Arial; background: #f0f0f0; padding: 30px; }
+    form {
+      background: white;
+      padding: 20px;
+      max-width: 400px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px;
+      background: green;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: darkgreen;
+    }
+  </style>
+</head>
+<body>
+  <h1>Добавить товар</h1>
+  <form id="addProductForm">
+    <input type="text" id="name" placeholder="Название товара" required>
+    <textarea id="description" placeholder="Описание" required></textarea>
+    <input type="number" id="price" placeholder="Цена, ₽" required>
+    <input type="text" id="image" placeholder="URL изображения" required>
+    <button type="submit">Добавить</button>
+  </form>
+
+  <script>
+    const form = document.getElementById("addProductForm");
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const price = document.getElementById("price").value.trim();
+      const image = document.getElementById("image").value.trim();
+
+      const product = { name, description, price, image };
+
+      const products = JSON.parse(localStorage.getItem("products") || "[]");
+      products.push(product);
+      localStorage.setItem("products", JSON.stringify(products));
+
+      alert("Товар добавлен!");
+      form.reset();
+    });
+  </script>
+</body>
+</html>
