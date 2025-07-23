@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Маркет</title>
+  <style>
+    body { font-family: Arial; background: #f5f5f5; padding: 20px; }
+    .product-card {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 400px;
+    }
+    .product-card img {
+      width: 100%;
+      border-radius: 8px;
+    }
+    .product-card h3 {
+      margin: 10px 0 5px;
+    }
+    .product-card p {
+      margin: 0 0 10px;
+    }
+    .product-price {
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <h1>Маркет</h1>
+  <div id="productList"></div>
+
+  <script>
+    const productList = document.getElementById("productList");
+    const products = JSON.parse(localStorage.getItem("products") || "[]");
+
+    if (products.length === 0) {
+      productList.innerHTML = "<p>Пока нет товаров.</p>";
+    } else {
+      products.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <img src="${p.image}" alt="${p.name}">
+          <h3>${p.name}</h3>
+          <p>${p.description}</p>
+          <p class="product-price">${p.price} ₽</p>
+        `;
+        productList.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>
