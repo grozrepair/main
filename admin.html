@@ -2,18 +2,22 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Добавить товар</title>
+  <title>Админ-панель</title>
   <style>
-    body { font-family: Arial; background: #f0f0f0; padding: 30px; }
-    form {
+    body {
+      font-family: Arial;
+      background: #f0f0f0;
+      padding: 30px;
+    }
+    form, .product-list, .login-form {
       background: white;
       padding: 20px;
-      max-width: 400px;
+      max-width: 500px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
     }
-
-    input, textarea {
+    input, textarea, select {
       width: 100%;
       margin-bottom: 10px;
       padding: 8px;
@@ -31,20 +35,163 @@
     button:hover {
       background: darkgreen;
     }
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .tabs button {
+      background: #eee;
+      color: black;
+    }
+    .tabs button.active {
+      background: green;
+      color: white;
+    }
+    img.preview {
+      max-width: 100%;
+      margin-bottom: 10px;
+    }
+
+:root {
+      --primary: #0a84ff;
+      --primary-dark: #0066cc;
+      --secondary: #5e5ce6;
+      --dark: #1c1c1e;
+      --darker: #121214;
+      --light: #f5f5f7;
+      --gray: #8e8e93;
+      --card-bg: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --glass: rgba(255, 255, 255, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #0f0f12 0%, #1a1a1f 100%);
+      color: var(--light);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 40px;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+    }
+
+    #productList {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 25px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
+    .product-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .product-card p {
+      color: var(--gray);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .product-price {
+      font-weight: bold;
+      font-size: 1.5rem;
+      color: var(--primary);
+      font-family: "Roboto Mono", monospace;
+    }
   </style>
 </head>
 <body>
-  <h1>Добавить товар</h1>
-  <form id="addProductForm">
-    <input type="text" id="name" placeholder="Название товара" required>
-    <textarea id="description" placeholder="Описание" required></textarea>
-    <input type="number" id="price" placeholder="Цена, ₽" required>
-    <input type="text" id="image" placeholder="URL изображения" required>
-    <button type="submit">Добавить</button>
-  </form>
+  <div class="login-form" id="authForm">
+    <h2>Вход</h2>
+    <input type="text" id="login" placeholder="Логин">
+    <input type="password" id="password" placeholder="Пароль">
+    <button onclick="loginUser()">Войти</button>
+  </div>
+
+  <div id="adminPanel" style="display:none">
+    <h1>Админ-панель</h1>
+
+    <div class="tabs">
+      <button onclick="switchCategory('Комплектующие')" id="tab-комплектующие" class="active">Комплектующие</button>
+      <button onclick="switchCategory('Сборки')" id="tab-сборки">Сборки</button>
+    </div>
+
+    <form id="addProductForm">
+      <input type="text" id="name" placeholder="Название товара" required>
+      <textarea id="description" placeholder="Описание" required></textarea>
+      <input type="number" id="price" placeholder="Цена, ₽" required>
+      <input type="file" id="imageFile" accept="image/*">
+      <img id="preview" class="preview" src="" alt="">
+      <button type="submit">Добавить</button>
+    </form>
+
+    <div>
+      <input type="text" id="searchInput" placeholder="Поиск по названию...">
+    </div>
+
+    <div class="product-list" id="productList"></div>
+  </div>
 
   <script>
+    let currentCategory = 'Комплектующие';
+
+    function switchCategory(category) {
+      currentCategory = category;
+      document.getElementById("tab-комплектующие").classList.remove("active");
+      document.getElementById("tab-сборки").classList.remove("active");
+      document.getElementById("tab-" + category.toLowerCase()).classList.add("active");
+      displayProducts();
+    }
+
     const form = document.getElementById("addProductForm");
+    const imageFile = document.getElementById("imageFile");
+    const preview = document.getElementById("preview");
+
+    imageFile.addEventListener("change", () => {
+      const file = imageFile.files[0];
+      const reader = new FileReader();
+      reader.onload = e => preview.src = e.target.result;
+      if (file) reader.readAsDataURL(file);
+    });
 
     form.addEventListener("submit", function(e) {
       e.preventDefault();
@@ -52,17 +199,77 @@
       const name = document.getElementById("name").value.trim();
       const description = document.getElementById("description").value.trim();
       const price = document.getElementById("price").value.trim();
-      const image = document.getElementById("image").value.trim();
+      const image = preview.src;
 
       const product = { name, description, price, image };
 
-      const products = JSON.parse(localStorage.getItem("products") || "[]");
+      const products = JSON.parse(localStorage.getItem(currentCategory) || "[]");
       products.push(product);
-      localStorage.setItem("products", JSON.stringify(products));
+      localStorage.setItem(currentCategory, JSON.stringify(products));
 
       alert("Товар добавлен!");
       form.reset();
+      preview.src = "";
+      displayProducts();
     });
+
+    function displayProducts() {
+      const productList = document.getElementById("productList");
+      const products = JSON.parse(localStorage.getItem(currentCategory) || "[]");
+      const searchQuery = document.getElementById("searchInput").value.toLowerCase();
+      productList.innerHTML = "";
+
+      products.forEach((product, index) => {
+        if (!product.name.toLowerCase().includes(searchQuery)) return;
+
+        const div = document.createElement("div");
+        div.innerHTML = `
+          <h3>${product.name}</h3>
+          <img src="${product.image}" class="preview">
+          <p>${product.description}</p>
+          <p><strong>${product.price} ₽</strong></p>
+          <button onclick="deleteProduct(${index})">Удалить</button>
+          <button onclick="editProduct(${index})">Редактировать</button>
+          <hr>
+        `;
+        productList.appendChild(div);
+      });
+    }
+
+    function deleteProduct(index) {
+      if (!confirm("Удалить товар?")) return;
+      const products = JSON.parse(localStorage.getItem(currentCategory) || "[]");
+      products.splice(index, 1);
+      localStorage.setItem(currentCategory, JSON.stringify(products));
+      displayProducts();
+    }
+
+    function editProduct(index) {
+      const products = JSON.parse(localStorage.getItem(currentCategory) || "[]");
+      const product = products[index];
+      document.getElementById("name").value = product.name;
+      document.getElementById("description").value = product.description;
+      document.getElementById("price").value = product.price;
+      preview.src = product.image;
+      products.splice(index, 1);
+      localStorage.setItem(currentCategory, JSON.stringify(products));
+      displayProducts();
+    }
+
+    document.getElementById("searchInput").addEventListener("input", displayProducts);
+
+    // Авторизация
+    function loginUser() {
+      const login = document.getElementById("login").value;
+      const pass = document.getElementById("password").value;
+      if (login === "admin" && pass === "admin") {
+        document.getElementById("authForm").style.display = "none";
+        document.getElementById("adminPanel").style.display = "block";
+        displayProducts();
+      } else {
+        alert("Неверные данные");
+      }
+    }
   </script>
 </body>
 </html>
