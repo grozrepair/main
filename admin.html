@@ -200,12 +200,12 @@
       const description = document.getElementById("description").value.trim();
       const price = document.getElementById("price").value.trim();
       const image = preview.src;
+      const category = currentCategory === 'Комплектующие' ? 'components' : 'builds';
+      const product = { name, description, price, image, category };
 
-      const product = { name, description, price, image };
-
-      const products = JSON.parse(localStorage.getItem(currentCategory) || "[]");
+      const products = JSON.parse(localStorage.getItem("products") || "[]");
       products.push(product);
-      localStorage.setItem(currentCategory, JSON.stringify(products));
+      localStorage.setItem("products", JSON.stringify(products));
 
       alert("Товар добавлен!");
       form.reset();
@@ -215,7 +215,9 @@
 
     function displayProducts() {
       const productList = document.getElementById("productList");
-      const products = JSON.parse(localStorage.getItem(currentCategory) || "[]");
+      const allProducts = JSON.parse(localStorage.getItem("products") || "[]");
+      const category = currentCategory === 'Комплектующие' ? 'components' : 'builds';
+      const products = allProducts.filter(p => p.category === category);
       const searchQuery = document.getElementById("searchInput").value.toLowerCase();
       productList.innerHTML = "";
 
