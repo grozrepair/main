@@ -4,44 +4,192 @@
   <meta charset="UTF-8">
   <title>Маркет</title>
   <style>
-    body { font-family: Arial; background: #f5f5f5; padding: 20px; }
-    .product-card {
-      background: white;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      max-width: 400px;
+    :root {
+      --primary: #0a84ff;
+      --secondary: #5e5ce6;
+      --dark: #1c1c1e;
+      --darker: #121214;
+      --light: #f5f5f7;
+      --gray: #8e8e93;
+      --card-bg: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --glass: rgba(255, 255, 255, 0.1);
     }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #0f0f12 0%, #1a1a1f 100%);
+      color: var(--light);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0 30px;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 8px;
+      max-width: max-content;
+      margin-inline: auto;
+      border: 1px solid var(--card-border);
+    }
+
+    .tab-btn {
+      padding: 12px 30px;
+      background: transparent;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--gray);
+      font-family: "Inter", sans-serif;
+      font-size: 1.1rem;
+    }
+
+    .tab-btn.active {
+      background: rgba(10, 132, 255, 0.2);
+      color: var(--primary);
+      box-shadow: 0 0 15px rgba(10, 132, 255, 0.2);
+    }
+
+    .search-box {
+      max-width: 500px;
+      margin: 0 auto 30px;
+      display: flex;
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 12px 20px;
+      border-radius: 12px;
+      border: none;
+      background: var(--card-bg);
+      color: var(--light);
+      font-size: 1rem;
+      border: 1px solid var(--card-border);
+    }
+
+    #productList {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 25px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
     .product-card img {
       width: 100%;
-      border-radius: 8px;
+      height: auto;
+      border-radius: 15px;
+      margin-bottom: 20px;
     }
 
     .product-card h3 {
-      margin: 10px 0 5px;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
     }
+
     .product-card p {
-      margin: 0 0 10px;
+      color: var(--gray);
+      line-height: 1.6;
+      margin-bottom: 10px;
     }
+
     .product-price {
       font-weight: bold;
-      color: green;
+      font-size: 1.5rem;
+      color: var(--primary);
+      font-family: "Roboto Mono", monospace;
     }
   </style>
 </head>
 <body>
   <h1>Маркет</h1>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-category="components">Комплектующие</button>
+    <button class="tab-btn" data-category="builds">Сборки</button>
+  </div>
+
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Поиск по названию...">
+  </div>
+
   <div id="productList"></div>
 
   <script>
-    const productList = document.getElementById("productList");
-    const products = JSON.parse(localStorage.getItem("products") || "[]");
+    const tabs = document.querySelectorAll('.tab-btn');
+    const searchInput = document.getElementById('searchInput');
+    const productList = document.getElementById('productList');
 
-    if (products.length === 0) {
-      productList.innerHTML = "<p>Пока нет товаров.</p>";
-    } else {
-      products.forEach(p => {
+    let products = JSON.parse(localStorage.getItem("products") || "[]");
+    let activeCategory = "components";
+    let searchQuery = "";
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        activeCategory = tab.dataset.category;
+        renderProducts();
+      });
+    });
+
+    searchInput.addEventListener("input", () => {
+      searchQuery = searchInput.value.trim().toLowerCase();
+      renderProducts();
+    });
+
+    function renderProducts() {
+      productList.innerHTML = "";
+
+      const filtered = products.filter(p =>
+        p.category === activeCategory &&
+        p.name.toLowerCase().includes(searchQuery)
+      );
+
+      if (filtered.length === 0) {
+        productList.innerHTML = "<p style='text-align:center;color:var(--gray)'>Товары не найдены.</p>";
+        return;
+      }
+
+      filtered.forEach(p => {
         const card = document.createElement("div");
         card.className = "product-card";
         card.innerHTML = `
@@ -53,6 +201,8 @@
         productList.appendChild(card);
       });
     }
+
+    renderProducts();
   </script>
 </body>
 </html>
